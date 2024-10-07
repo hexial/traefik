@@ -4,7 +4,6 @@
 package acme
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -17,7 +16,7 @@ func CheckFile(name string) (bool, error) {
 			return false, err
 		}
 		defer nf.Close()
-		return false, nf.Chmod(0o600)
+		return false, nil
 	}
 	if err != nil {
 		return false, err
@@ -27,10 +26,6 @@ func CheckFile(name string) (bool, error) {
 	fi, err := f.Stat()
 	if err != nil {
 		return false, err
-	}
-
-	if fi.Mode().Perm()&0o077 != 0 {
-		return false, fmt.Errorf("permissions %o for %s are too open, please use 600", fi.Mode().Perm(), name)
 	}
 
 	return fi.Size() > 0, nil
